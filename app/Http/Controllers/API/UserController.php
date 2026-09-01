@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -68,7 +69,8 @@ class UserController extends Controller
 
     public function getUser(Request $request)
     {
-        $user = $request->user()->load('userDetails');
+        $user = Auth::user();
+        Log::info('Authenticated user: ' . json_encode($user)); // Log the authenticated user for debugging
         return response()->json($user);
     }
 

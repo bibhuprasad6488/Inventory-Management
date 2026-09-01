@@ -43,7 +43,7 @@
                         </div>
                         <div class="col col-stats ms-3 ms-sm-0">
                             <div class="numbers">
-                                <p class="card-category">Vehicles</p>
+                                <p class="card-category">Categories</p>
                                 <h4 class="card-title">{{ 0 }}</h4>
                             </div>
                         </div>

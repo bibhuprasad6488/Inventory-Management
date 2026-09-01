@@ -4,7 +4,7 @@
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
             <a href="{{ route('admin.dashboard') }}" class="logo">
-                {{ auth()->user()->name }}
+                {{ auth()->user()->billing_name }}
             </a>
             <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
@@ -29,28 +29,28 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li class="nav-item {{ request()->routeIs(['admin.driver.*']) ? 'active' : '' }} ">
-                    <a href="{{ route('admin.driver.index') }}">
+                <li class="nav-item {{ request()->routeIs(['admin.retailers.*']) ? 'active' : '' }} ">
+                    <a href="{{ route('admin.retailers.index') }}">
                         <i class="fas fa-user-tag"></i>
-                        <p>Drivers</p>
+                        <p>Retailers</p>
                     </a>
                 </li>
-                <li class="nav-item {{ request()->routeIs(['admin.vehicle.*']) ? 'active' : '' }} ">
-                    <a href="{{ route('admin.vehicle.index') }}">
+                <li class="nav-item {{ request()->routeIs(['admin.categories.*']) ? 'active' : '' }} ">
+                    <a href="{{ route('admin.categories.index') }}">
                         <i class="fas fa-car"></i>
-                        <p>Vehicles</p>
+                        <p>Categories</p>
                     </a>
                 </li>
-                <li class="nav-item {{ request()->routeIs(['admin.rides.*']) ? 'active' : '' }} ">
-                    <a href="{{ route('admin.rides.index') }}">
+                <li class="nav-item {{ request()->routeIs(['admin.pack-sizes.*']) ? 'active' : '' }} ">
+                    <a href="{{ route('admin.pack-sizes.index') }}">
                         <i class="fas fa-car-side"></i>
-                        <p>Rides</p>
+                        <p>Pack Sizes</p>
                     </a>
                 </li>
-                <li class="nav-item {{ request()->routeIs(['admin.bookings.*']) ? 'active' : '' }} ">
-                    <a href="{{ route('admin.bookings.index') }}">
+                <li class="nav-item {{ request()->routeIs(['admin.products.*']) ? 'active' : '' }} ">
+                    <a href="{{ route('admin.products.index') }}">
                         <i class="fas fa-clipboard-list"></i>
-                        <p>Bookings</p>
+                        <p>Products</p>
                     </a>
                 </li>
                 {{-- <li class="nav-section">

@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\PackSizeController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\Admin\RideController;
-use App\Http\Controllers\Admin\VehicleController;
+use App\Http\Controllers\Admin\RetailerController;
 use App\Http\Controllers\Admin\WebsiteSettingController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -42,10 +42,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/change-password/{id}', [ProfileController::class, 'chnagePassword'])->name('chnage.password');
 
 
-        Route::resource('/rides', RideController::class)->names('rides');
-        Route::resource('/bookings', BookingController::class)->names('bookings');
-        Route::resource('/drivers', DriverController::class)->names('driver');
-        Route::resource('/vehicles', VehicleController::class)->names('vehicle');
+        Route::resource('/categories', CategoryController::class)->names('categories');
+        Route::resource('/pack-sizes', PackSizeController::class)->names('pack-sizes');
+        Route::resource('/products', ProductController::class)->names('products');
+        Route::resource('/retailers', RetailerController::class)->names('retailers');
         Route::resource('/website-setting', WebsiteSettingController::class)->names('website-setting');
     });
 });
