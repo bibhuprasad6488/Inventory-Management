@@ -1,23 +1,32 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class ProductController extends Controller
+class ApiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function categories(Request $request)
     {
-        $products = Product::all()->map(function ($product) {
-            $product->img_path = $product->image ? asset('uploads/product/' . $product->image) : asset('admin/img/no-img.png');
-            return $product;
+        $categories = Category::where('status', 1)->get()->map(function ($category) {
+            $products = Product::where('category_id', $category->id)->get();
+            $category->products_count = $products->count();
+            $category->img_path = $category->img_path ? asset('uploads/category/' . $category->img_path) : asset('admin/img/no-img.png');
+            // $category->products = $category->products->map(function ($product) {
+            //     $product->img_path = $product->img_path ? asset('uploads/product/' . $product->img_path) : asset('admin/img/no-img.png');
+            //     return $product;
+            // });
+            return $category;
         });
-        return view('admin.products.list', compact('products'));
+
+        return response()->json($categories);
     }
 
     /**

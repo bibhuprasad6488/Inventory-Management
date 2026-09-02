@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PackSize;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PackSizeController extends Controller
 {
@@ -12,7 +14,8 @@ class PackSizeController extends Controller
      */
     public function index()
     {
-        //
+        $packSizes = PackSize::all();
+        return view('admin.packsizes.list', compact('packSizes'));
     }
 
     /**
@@ -20,7 +23,7 @@ class PackSizeController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.packsizes.add');
     }
 
     /**
@@ -28,7 +31,24 @@ class PackSizeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'qty' => 'required|unique:pack_sizes,qty',
+            'status' => 'required|in:1,0',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->errors()->first());
+        }
+        try {
+            $packSize = new PackSize();
+            $packSize->qty = $request->qty;
+            $packSize->status = $request->status;
+            $packSize->save();
+
+            return redirect()->route('admin.pack-sizes.index')->with('success', 'Pack Size created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error',  $e->getMessage());
+        }
     }
 
     /**
