@@ -13,7 +13,7 @@
 
     <!-- Favicon -->
     <link rel="icon"
-        href="@if ($setting) {{ asset('storage/images/settings/' . $setting->favicon) }} @else {{ asset('admin/img/favicon.png') }} @endif"
+        href="@if ($setting) {{ asset('storage/images/settings/' . $setting->favicon) }} @else {{ asset('admin/img/user.png') }} @endif"
         type="image/x-icon" />
 
     <!-- Fonts -->
@@ -44,12 +44,14 @@
     <link rel="stylesheet" href="{{ asset('admin/css/kaiadmin.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/css/demo.css') }}" />
 
+    {{-- Select2 CSS --}}
+    <link href="{{ asset('admin/css/select2.min.css') }}" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
 
     <link href="{{ asset('admin/assets/summernote/summernote.min.css') }}" rel="stylesheet">
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .fade-notify {
             opacity: 1;
@@ -110,6 +112,7 @@
 
     <!-- Core JS -->
     <script src="{{ asset('admin/js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('admin/js/select2.min.js') }}"></script>
     <script src="{{ asset('admin/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('admin/js/core/bootstrap.min.js') }}"></script>
 

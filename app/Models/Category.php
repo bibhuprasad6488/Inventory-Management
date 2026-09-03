@@ -16,6 +16,10 @@ class Category extends Model
         'updated_at'
     ];
 
+    // protected $hidden = [
+    //     'parent_category',
+    // ];
+
     public function parentCategory()
     {
         return $this->belongsTo(Category::class, 'parent_category');

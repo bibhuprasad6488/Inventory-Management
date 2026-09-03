@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\Ride;
 use App\Models\RideBooking;
 use App\Models\User;
@@ -22,9 +25,15 @@ class DashboardController extends Controller
         }
 
         $retailers = User::where('role_id', 2)->get();
-
+        $categories = Category::all();
+        $products = Product::all();
+        $orders = Order::where('status', 'approved')->get();
+        $totalOrderAmount = $orders->sum('amount');
         return view('admin.dashboard', compact(
-            'retailers'
+            'retailers',
+            'categories',
+            'products',
+            'totalOrderAmount'
         ));
     }
 }

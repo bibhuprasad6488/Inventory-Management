@@ -30,11 +30,11 @@
                     <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="javascript:;"
                         aria-expanded="false">
                         <div class="avatar-sm">
-                            <img src="{{ asset('admin/img/favicon.png') }}" alt="..." class="avatar-img rounded-circle" />
+                            <img src="{{ asset('admin/img/user.png') }}" alt="..." class="avatar-img rounded-circle" />
                         </div>
                         <span class="profile-username">
                             <span class="op-7">Hi,</span>
-                            <span class="fw-bold">{{ auth()->user()->name }}</span>
+                            <span class="fw-bold">{{ auth()->user()->billing_name }}</span>
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -42,11 +42,11 @@
                             <li>
                                 <div class="user-box">
                                     <div class="avatar-lg">
-                                        <img src="{{ asset('admin/img/favicon.png') }}" alt="image profile"
+                                        <img src="{{ asset('admin/img/user.png') }}" alt="image profile"
                                             class="avatar-img rounded" />
                                     </div>
                                     <div class="u-text">
-                                        <h4>{{ auth()->user()->name }}</h4>
+                                        <h4>{{ auth()->user()->billing_name }}</h4>
                                         <p class="text-muted">{{ auth()->user()->email }}</p>
                                         <a href="{{ route('admin.profile.edit') }}" class="btn btn-xs btn-secondary btn-sm">View
                                             Profile</a>

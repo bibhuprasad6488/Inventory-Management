@@ -37,13 +37,13 @@
                 </li>
                 <li class="nav-item {{ request()->routeIs(['admin.categories.*']) ? 'active' : '' }} ">
                     <a href="{{ route('admin.categories.index') }}">
-                        <i class="fas fa-car"></i>
+                        <i class="fas fa-crosshairs"></i>
                         <p>Categories</p>
                     </a>
                 </li>
                 <li class="nav-item {{ request()->routeIs(['admin.pack-sizes.*']) ? 'active' : '' }} ">
                     <a href="{{ route('admin.pack-sizes.index') }}">
-                        <i class="fas fa-car-side"></i>
+                        <i class="fas fa-crosshairs"></i>
                         <p>Pack Sizes</p>
                     </a>
                 </li>
@@ -51,6 +51,12 @@
                     <a href="{{ route('admin.products.index') }}">
                         <i class="fas fa-clipboard-list"></i>
                         <p>Products</p>
+                    </a>
+                </li>
+                <li class="nav-item {{ request()->routeIs(['admin.stocks.*']) ? 'active' : '' }} ">
+                    <a href="{{ route('admin.stocks.index') }}">
+                        <i class="fas fa-clipboard-list"></i>
+                        <p>Add Stock</p>
                     </a>
                 </li>
                 {{-- <li class="nav-section">
@@ -102,12 +108,12 @@
                     </div> --}}
                 </li>
 
-                <li class="nav-item {{ request()->routeIs(['admin.website-setting.index']) ? 'active' : '' }} ">
+                {{-- <li class="nav-item {{ request()->routeIs(['admin.website-setting.index']) ? 'active' : '' }} ">
                     <a href="{{ route('admin.website-setting.index') }}">
                         <i class="fas fa-cogs"></i>
                         <p>Site Setting</p>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </div>
     </div>

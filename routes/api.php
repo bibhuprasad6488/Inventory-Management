@@ -15,7 +15,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/get-website-data', [UserController::class, 'getSiteData']);
     // Categories
     Route::get('/categories', [ApiController::class, 'categories']);
-    
+    Route::get('/products', [ApiController::class, 'products']);
+    Route::get('/category/{slug}', [ApiController::class, 'catWithProducts']);
+
     Route::post('/notifications/send', [FcmController::class, 'send']);
     Route::middleware('auth:sanctum')->group(function () {
         // Fetch the authenticated user along with their userDetails if they exist
@@ -25,7 +27,10 @@ Route::prefix('v1')->group(function () {
         //         : $request->user();
         // });
 
+        Route::post('/create-order', [ApiController::class, 'createOrder']);
+        Route::get('/my-orders', [ApiController::class, 'getUserOrders']);
         Route::post('/notifications/register-token', [UserController::class, 'registerPushToken']);
+        Route::any('/user-update', [UserController::class, 'updateUser']);
         Route::get('/user', [UserController::class, 'getUser']);
         Route::post('/logout', [AuthController::class, 'logout']);
     });

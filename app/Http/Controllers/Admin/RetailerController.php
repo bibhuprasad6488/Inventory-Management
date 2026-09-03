@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RetailerController extends Controller
@@ -12,7 +13,8 @@ class RetailerController extends Controller
      */
     public function index()
     {
-        //
+        $retailers = User::where('role_id', 2)->get();
+        return view('admin.retailers.list', compact('retailers'));
     }
 
     /**
@@ -36,7 +38,8 @@ class RetailerController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $retailer = User::findOrFail($id);
+        return view('admin.retailers.show', compact('retailer'));
     }
 
     /**

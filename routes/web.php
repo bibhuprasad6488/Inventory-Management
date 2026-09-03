@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PackSizeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RetailerController;
+use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\WebsiteSettingController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +47,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('/pack-sizes', PackSizeController::class)->names('pack-sizes');
         Route::resource('/products', ProductController::class)->names('products');
         Route::resource('/retailers', RetailerController::class)->names('retailers');
+        Route::resource('/stocks', StockController::class)->names('stocks');
         Route::resource('/website-setting', WebsiteSettingController::class)->names('website-setting');
     });
 });

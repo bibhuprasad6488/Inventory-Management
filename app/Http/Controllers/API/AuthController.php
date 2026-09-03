@@ -101,7 +101,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // $user->tokens()->delete();
+        $user->tokens()->delete();
         // $token = $user->createToken('auth_token')->plainTextToken;
         $token = $user->createToken('api_token')->plainTextToken;
 

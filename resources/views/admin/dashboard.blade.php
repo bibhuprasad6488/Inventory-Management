@@ -38,13 +38,13 @@
                     <div class="row align-items-center">
                         <div class="col-icon">
                             <div class="icon-big text-center icon-info bubble-shadow-small">
-                                <i class="fas fa-user-check"></i>
+                                <i class="fas fa-crosshairs"></i>
                             </div>
                         </div>
                         <div class="col col-stats ms-3 ms-sm-0">
                             <div class="numbers">
                                 <p class="card-category">Categories</p>
-                                <h4 class="card-title">{{ 0 }}</h4>
+                                <h4 class="card-title">{{ count($categories) }}</h4>
                             </div>
                         </div>
                     </div>
@@ -57,13 +57,13 @@
                     <div class="row align-items-center">
                         <div class="col-icon">
                             <div class="icon-big text-center icon-secondary bubble-shadow-small">
-                                <i class="fas fa-car-side"></i>
+                                <i class="fas fa-crosshairs"></i>
                             </div>
                         </div>
                         <div class="col col-stats ms-3 ms-sm-0">
                             <div class="numbers">
-                                <p class="card-category">Rides</p>
-                                <h4 class="card-title">{{ 0 }}</h4>
+                                <p class="card-category">Products</p>
+                                <h4 class="card-title">{{ count($products) }}</h4>
                             </div>
                         </div>
                     </div>
@@ -81,8 +81,8 @@
                         </div>
                         <div class="col col-stats ms-3 ms-sm-0">
                             <div class="numbers">
-                                <p class="card-category">Total Booking Amount</p>
-                                <h4 class="card-title">$ {{ 0 }}</h4>
+                                <p class="card-category">Total Order Amount</p>
+                                <h4 class="card-title">{{ '₹' . $totalOrderAmount }}</h4>
                             </div>
                         </div>
                     </div>

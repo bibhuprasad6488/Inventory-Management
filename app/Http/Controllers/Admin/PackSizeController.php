@@ -64,7 +64,8 @@ class PackSizeController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $packSize = PackSize::findOrFail($id);
+        return view('admin.packsizes.edit', compact('packSize'));
     }
 
     /**
@@ -72,7 +73,24 @@ class PackSizeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'qty' => 'required|unique:pack_sizes,qty,' . $id,
+            'status' => 'required|in:1,0',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->errors()->first());
+        }
+        try {
+            $packSize = PackSize::findOrFail($id);
+            $packSize->qty = $request->qty;
+            $packSize->status = $request->status;
+            $packSize->save();
+
+            return redirect()->route('admin.pack-sizes.index')->with('success', 'Pack Size updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error',  $e->getMessage());
+        }
     }
 
     /**
@@ -80,6 +98,11 @@ class PackSizeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $packSize = PackSize::with('products')->findOrFail($id);
+        // find any products associated with this pack
+        $products = $packSize->products;
+        if ($products->count() > 0) {
+            return redirect()->route('admin.categories.index')->with('error', 'Cannot delete category with associated products.');
+        }
     }
 }
