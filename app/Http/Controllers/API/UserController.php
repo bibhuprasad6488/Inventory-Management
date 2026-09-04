@@ -9,6 +9,7 @@ use App\Models\SiteSetting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -199,6 +200,40 @@ class UserController extends Controller
             ], 200);
         } catch (\Exception $e) {
             Log::error('Error updating user: ' . $e->getMessage());
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getDashboardData(Request $request)
+    {
+        $userId = Auth::user()->id;
+        $user = User::find($userId);
+        if (!$user) {
+            return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);
+        }
+
+        try {
+
+            // Make cache key
+            $dashDataCacheKey = 'dashboard_data_user_' . $userId;
+            $cachedData = Cache::remember($dashDataCacheKey, now()->addMinutes(10), function () use ($user) {
+                // Fetch the dashboard data for the user
+                return [
+                    'user_name' => $user->billing_name,
+                    'due_amount' => $user->due_amount,
+                    'total_orders' => $user->orders()->count(),
+                    'total_order_amount' => $user->orders()->sum('amount'),
+                    'latest_orders' => $user->orders()->orderBy('order_date', 'desc')->take(3)->get(),
+                    // Add more dashboard metrics as needed
+                ];
+            });
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $cachedData
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Error fetching dashboard data: ' . $e->getMessage());
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }

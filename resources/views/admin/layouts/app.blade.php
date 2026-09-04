@@ -86,6 +86,20 @@
             border: 1px solid #6c757d !important;
             border-radius: 4px;
         }
+
+
+        .select2-container {
+            width: 100% !important;
+        }
+
+        .select2-container .select2-selection--single {
+            height: 38px;
+            padding: 5px 10px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px;
+        }
     </style>
 </head>
 
@@ -332,6 +346,16 @@
                 }, 3000);
             }
         };
+    </script>
+    <script>
+        // Initialize Select2 for all elements with the class 'select2'
+        function initializeSelect2(element) {
+            $(element).select2({
+                placeholder: 'Search and select',
+                allowClear: true,
+                width: '100%'
+            });
+        }
     </script>
     @stack('scripts')
 </body>

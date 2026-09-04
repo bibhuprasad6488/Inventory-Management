@@ -47,33 +47,9 @@
         </div>
     </div>
 @endsection
-@push('styles')
-    <style>
-        .select2-container {
-            width: 100% !important;
-        }
-
-        .select2-container .select2-selection--single {
-            height: 38px;
-            padding: 5px 10px;
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 36px;
-        }
-    </style>
-@endpush
 @push('scripts')
     <script>
         $(document).ready(function() {
-
-            function initializeSelect2(element) {
-                $(element).select2({
-                    placeholder: 'Search and select product',
-                    allowClear: true,
-                    width: '100%'
-                });
-            }
 
             initializeSelect2('.product-select');
 
@@ -130,55 +106,53 @@
                 });
             }
 
-
-
             $(document).on('change', '.product-select', function() {
                 updateProductOptions();
             });
             $(document).on('click', '.addBtn', function() {
 
                 let newRow = `
-        <tr class="stock-row">
+                    <tr class="stock-row">
 
-            <td>
-                <select name="p_id[]"
-                        class="form-control product-select"
-                        required>
+                        <td>
+                            <select name="p_id[]"
+                                    class="form-control product-select"
+                                    required>
 
-                    <option value="" selected disabled>
-                        Select Product
-                    </option>
+                                <option value="" selected disabled>
+                                    Select Product
+                                </option>
 
-                    @foreach ($products as $p)
-                        <option value="{{ $p->id }}">
-                            {{ ucfirst($p->product_name) }}
-                            {{ $p->packSize?->qty }}
-                        </option>
-                    @endforeach
+                                @foreach ($products as $p)
+                                    <option value="{{ $p->id }}">
+                                        {{ ucfirst($p->product_name) }}
+                                        {{ $p->packSize?->qty }}
+                                    </option>
+                                @endforeach
 
-                </select>
-            </td>
+                            </select>
+                        </td>
 
-            <td>
-                <input type="number"
-                       class="form-control"
-                       name="stocks[]"
-                       placeholder="Stock Qty"
-                       min="1"
-                       required>
-            </td>
+                        <td>
+                            <input type="number"
+                                class="form-control"
+                                name="stocks[]"
+                                placeholder="Stock Qty"
+                                min="1"
+                                required>
+                        </td>
 
-            <td class="text-center">
+                        <td class="text-center">
 
-                <button type="button"
-                        class="btn btn-sm btn-danger removeBtn">
-                    −
-                </button>
+                            <button type="button"
+                                    class="btn btn-sm btn-danger removeBtn">
+                                −
+                            </button>
 
-            </td>
+                        </td>
 
-        </tr>
-    `;
+                    </tr>
+                `;
 
                 $('#stockTableBody').append(newRow);
 

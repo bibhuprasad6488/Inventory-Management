@@ -31,6 +31,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/my-orders', [ApiController::class, 'getUserOrders']);
         Route::post('/notifications/register-token', [UserController::class, 'registerPushToken']);
         Route::any('/user-update', [UserController::class, 'updateUser']);
+        Route::any('/get-dashboard-data', [UserController::class, 'getDashboardData']);
         Route::get('/user', [UserController::class, 'getUser']);
         Route::post('/logout', [AuthController::class, 'logout']);
     });

@@ -4,7 +4,8 @@
 
     <div class="row">
         <div class="col-md-8 mx-auto">
-            <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data" id="catUploadForm">
+            <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data"
+                id="catUploadForm">
                 @csrf
                 @method('PUT')
                 <div class="card">
@@ -17,7 +18,7 @@
                                 Category
                             </label>
                             <div class="col-md-8 col-sm-6 col-xs-12">
-                                <select name="category_id" id="category_id" class="form-control" required>
+                                <select name="category_id" id="category_id" class="form-control add-cat" required>
                                     <option value="" selected disabled>Select Category</option>
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}"
@@ -50,7 +51,7 @@
                                 Size
                             </label>
                             <div class="col-md-8 col-sm-6 col-xs-12">
-                                <select name="pack_size" id="pack_size" class="form-control" required>
+                                <select name="pack_size" id="pack_size" class="form-control add-size" required>
                                     <option value="" selected disabled>Select Size</option>
                                     @foreach ($packSizes as $pack)
                                         <option value="{{ $pack->id }}"
@@ -148,3 +149,11 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            initializeSelect2('.add-cat, .add-size');
+        })
+    </script>
+@endpush

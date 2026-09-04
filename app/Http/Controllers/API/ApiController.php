@@ -186,7 +186,7 @@ class ApiController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Unauthorized'], 401);
         }
 
-        $orders = Order::where('user_id', $user->id)->with('orderDetails')->get();
+        $orders = Order::where('user_id', $user->id)->with('orderDetails')->orderBy('order_date', 'desc')->get();
 
         return response()->json([
             'status' => 'success',

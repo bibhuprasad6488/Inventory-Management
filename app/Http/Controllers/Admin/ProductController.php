@@ -18,7 +18,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all()->map(function ($product) {
+        $products = Product::orderBy('id', 'desc')->get()->map(function ($product) {
             $product->image = $product->image ? asset('uploads/product/' . $product->image) : asset('admin/img/no-img.png');
             return $product;
         });

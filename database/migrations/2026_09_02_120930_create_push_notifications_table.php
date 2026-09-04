@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('push_notifications', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
-            $table->string('push_token')->unique();
+            $table->string('push_token');
             $table->enum('platform',['android','ios','web'])->default('web');
             $table->string('device_name')->nullable();
             $table->boolean('is_active')->default(true);
