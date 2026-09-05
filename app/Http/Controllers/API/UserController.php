@@ -75,10 +75,12 @@ class UserController extends Controller
     public function getUser(Request $request)
     {
         try {
-            $user = Auth::user();
+            $userId = Auth::id();
+            $user = User::find($userId);
             if (!$user) {
                 return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);
             }
+            $user->order_count = $user->orders()->count();
 
             return response()->json([
                 'status' => 'success',
@@ -137,7 +139,8 @@ class UserController extends Controller
             return response()->json(['status' => 'error', 'message' => $validator->errors()->first()], 422);
         }
 
-        $user = Auth::user();
+        $userId = Auth::id();
+        $user = User::find($userId);
         if (!$user) {
             return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);
         }
@@ -171,7 +174,7 @@ class UserController extends Controller
 
     public function updateUser(Request $request)
     {
-        $userId = Auth::user()->id;
+        $userId = Auth::id();
         $user = User::find($userId);
         if (!$user) {
             return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);
@@ -206,7 +209,7 @@ class UserController extends Controller
 
     public function getDashboardData(Request $request)
     {
-        $userId = Auth::user()->id;
+        $userId = Auth::id();
         $user = User::find($userId);
         if (!$user) {
             return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);

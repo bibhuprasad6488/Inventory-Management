@@ -23,6 +23,9 @@ class User extends Authenticatable
         'password',
         'phone',
         'role_id',
+        'gst_number',
+        'billing_address',
+        'status',
     ];
 
     /**

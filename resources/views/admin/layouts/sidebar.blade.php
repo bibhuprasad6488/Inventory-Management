@@ -59,6 +59,12 @@
                         <p>Add Stock</p>
                     </a>
                 </li>
+                <li class="nav-item {{ request()->routeIs(['admin.orders.*']) ? 'active' : '' }} ">
+                    <a href="{{ route('admin.orders.index') }}">
+                        <i class="fas fa-clipboard-list"></i>
+                        <p>Orders</p>
+                    </a>
+                </li>
                 {{-- <li class="nav-section">
                     <span class="sidebar-mini-icon">
                         <i class="fa fa-ellipsis-h"></i>

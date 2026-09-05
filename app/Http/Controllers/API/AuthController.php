@@ -44,6 +44,7 @@ class AuthController extends Controller
                 'phone' => $request->phone,
                 'password' => Hash::make($request->password),
                 'role_id' => $request->role_id,
+                'status' => 'pending',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -94,6 +95,14 @@ class AuthController extends Controller
                 'message' => 'User not found'
             ], 401);
         }
+
+        if ($user->status !== 'approved') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User account is suspended'
+            ], 403);
+        }
+        
         if (!Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status' => 'error',

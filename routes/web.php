@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PackSizeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -47,7 +48,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('/pack-sizes', PackSizeController::class)->names('pack-sizes');
         Route::resource('/products', ProductController::class)->names('products');
         Route::resource('/retailers', RetailerController::class)->names('retailers');
+        Route::post('/retailers/{id}/status', [RetailerController::class, 'status'])->name('retailers.status');
         Route::resource('/stocks', StockController::class)->names('stocks');
+        Route::resource('/orders', OrderController::class)->names('orders');
         Route::resource('/website-setting', WebsiteSettingController::class)->names('website-setting');
     });
 });
