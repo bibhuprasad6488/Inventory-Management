@@ -47,12 +47,12 @@
                                         </td>
                                         <td>
                                             <a href="{{ route('admin.retailers.show', $u->id) }}"
-                                                class="btn btn-xs btn-success ">View</a>
+                                                class="btn btn-success ">View</a>
                                             <form action="{{ route('admin.retailers.destroy', $u->id) }}" method="POST"
                                                 style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-xs btn-danger"
+                                                <button type="submit" class="btn btn-danger"
                                                     onclick="return confirm('Are you sure you want to deactivate this?');">Suspend</button>
                                             </form>
                                         </td>

@@ -35,12 +35,12 @@
                                         <td>{{ \Carbon\Carbon::parse($ps->created_at)->format('d-m-Y') }}</td>
                                         <td>
                                             <a href="{{ route('admin.pack-sizes.edit', $ps->id) }}"
-                                                class="btn btn-xs btn-success ">Edit</a>
+                                                class="btn btn-success ">Edit</a>
                                             <form action="{{ route('admin.pack-sizes.destroy', $ps->id) }}" method="POST"
                                                 style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-xs btn-danger"
+                                                <button type="submit" class="btn btn-danger"
                                                     onclick="return confirm('Are you sure you want to delete this?');">Delete</button>
                                             </form>
                                         </td>

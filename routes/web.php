@@ -50,6 +50,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('/retailers', RetailerController::class)->names('retailers');
         Route::post('/retailers/{id}/status', [RetailerController::class, 'status'])->name('retailers.status');
         Route::resource('/stocks', StockController::class)->names('stocks');
+        Route::get('/stock-report', [StockController::class, 'report'])->name('stocks.report');
         Route::resource('/orders', OrderController::class)->names('orders');
         Route::resource('/website-setting', WebsiteSettingController::class)->names('website-setting');
     });

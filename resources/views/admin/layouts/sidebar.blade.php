@@ -53,7 +53,7 @@
                         <p>Products</p>
                     </a>
                 </li>
-                <li class="nav-item {{ request()->routeIs(['admin.stocks.*']) ? 'active' : '' }} ">
+                <li class="nav-item {{ request()->routeIs(['admin.stocks.index']) ? 'active' : '' }} ">
                     <a href="{{ route('admin.stocks.index') }}">
                         <i class="fas fa-clipboard-list"></i>
                         <p>Add Stock</p>
@@ -63,6 +63,12 @@
                     <a href="{{ route('admin.orders.index') }}">
                         <i class="fas fa-clipboard-list"></i>
                         <p>Orders</p>
+                    </a>
+                </li>
+                <li class="nav-item {{ request()->routeIs(['admin.stocks.report','admin.stocks.show']) ? 'active' : '' }} ">
+                    <a href="{{ route('admin.stocks.report') }}">
+                        <i class="fas fa-clipboard-list"></i>
+                        <p>Stock Report</p>
                     </a>
                 </li>
                 {{-- <li class="nav-section">

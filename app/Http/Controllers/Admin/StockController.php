@@ -19,7 +19,14 @@ class StockController extends Controller
         $products = Product::with('packSize')->where('status', 1)->get();
         return view('admin.stocks.add', compact('products'));
     }
-
+    public function report()
+    {
+        $products = Product::with('packSize')->orderBy('id', 'desc')->get()->map(function ($product) {
+            $product->image = $product->image ? asset('uploads/product/' . $product->image) : asset('admin/img/no-img.png');
+            return $product;
+        });
+        return view('admin.stocks.list', compact('products'));
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -48,7 +55,7 @@ class StockController extends Controller
         if (count($request->p_id) !== count($request->stocks)) {
             return back()->withInput()->with('error', 'Invalid product and stock data.');
         }
-        
+
         DB::beginTransaction();
         try {
 
@@ -71,7 +78,27 @@ class StockController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::with(['packSize', 'category'])->findOrFail($id);
+        $product->image = $product->image ? asset('uploads/product/' . $product->image) : asset('admin/img/no-img.png');
+        // find orders that have this product in their order details with order status delivered or processing along user information
+        $orders = DB::table('order_details')
+            ->join('orders', 'order_details.order_id', '=', 'orders.id')
+            ->where('order_details.product_id', $id)
+            ->join('users', 'orders.user_id', '=', 'users.id')
+            ->whereIn('orders.status', ['delivered', 'processing'])
+            ->select(
+                'orders.id',
+                'orders.order_number',
+                'order_details.qty as ordered_qty',
+                'orders.amount',
+                'orders.status',
+                'orders.order_date',
+                'users.billing_name as user_name'
+            )
+            ->orderBy('orders.order_date', 'desc')
+            ->get();
+        // dd($orders, $product);
+        return view('admin.stocks.show', compact('product', 'orders'));
     }
 
     /**

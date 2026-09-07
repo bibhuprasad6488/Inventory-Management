@@ -115,6 +115,7 @@ class ApiController extends Controller
 
         $validator = Validator::make($request->all(), [
             'product_name' => 'required|array|min:1',
+            'product_id' => 'required|array|min:1',
             // 'product_name.*' => 'required|string|exists:products,product_name',
 
             'pack_size' => 'required|array|min:1',
@@ -150,6 +151,7 @@ class ApiController extends Controller
                 $orderDetails = new OrderDetail();
 
                 $orderDetails->order_id = $order->id;
+                $orderDetails->product_id = $request->product_id[$k];
                 $orderDetails->product_name = $v;
                 $orderDetails->pack_size = $request->pack_size[$k];
                 $orderDetails->qty = $request->qty[$k];

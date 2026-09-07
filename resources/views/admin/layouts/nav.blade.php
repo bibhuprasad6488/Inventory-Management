@@ -48,7 +48,7 @@
                                     <div class="u-text">
                                         <h4>{{ auth()->user()->billing_name }}</h4>
                                         <p class="text-muted">{{ auth()->user()->email }}</p>
-                                        <a href="{{ route('admin.profile.edit') }}" class="btn btn-xs btn-secondary btn-sm">View
+                                        <a href="{{ route('admin.profile.edit') }}" class="btn btn-secondary btn-sm">View
                                             Profile</a>
                                     </div>
                                 </div>

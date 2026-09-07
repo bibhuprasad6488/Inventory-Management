@@ -40,20 +40,32 @@
                                         <td>{{ '₹' . $order->amount }}</td>
                                         <td>{{ \Carbon\Carbon::parse($order->order_date)->format('d-M-Y') }}</td>
                                         <td>
-                                            @if ($order->status == 'confirmed')
-                                                <span class="badge bg-success">Confirmed</span>
+                                            @if ($order->status === 'pending')
+                                                <span class="badge bg-warning">
+                                                    Pending
+                                                </span>
+                                            @elseif ($order->status === 'processing')
+                                                <span class="badge bg-info">
+                                                    Processing
+                                                </span>
+                                            @elseif ($order->status === 'delivered')
+                                                <span class="badge bg-success">
+                                                    Delivered
+                                                </span>
                                             @else
-                                                <span class="badge bg-warning">Pending</span>
+                                                <span class="badge bg-danger">
+                                                    Cancelled
+                                                </span>
                                             @endif
                                         </td>
                                         <td>
                                             <a href="{{ route('admin.orders.show', $order->id) }}"
-                                                class="btn btn-xs btn-success ">View</a>
+                                                class="btn btn-info ">View</a>
                                             {{-- <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST"
                                                 style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-xs btn-danger"
+                                                <button type="submit" class="btn btn-danger"
                                                     onclick="return confirm('Are you sure you want to delete this?');">Delete</button>
                                             </form> --}}
                                         </td>

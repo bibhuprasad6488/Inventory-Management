@@ -110,9 +110,13 @@
                                 <span class="badge bg-warning">
                                     Pending
                                 </span>
-                            @elseif ($order->status === 'approved')
+                            @elseif ($order->status === 'processing')
+                                <span class="badge bg-info">
+                                    Processing
+                                </span>
+                            @elseif ($order->status === 'delivered')
                                 <span class="badge bg-success">
-                                    Approved
+                                    Delivered
                                 </span>
                             @else
                                 <span class="badge bg-danger">
@@ -240,6 +244,55 @@
             </div>
 
         </div>
+
+        @if (in_array($order->status, ['pending', 'processing']))
+            {{-- Status Information --}}
+            <div class="col-lg-6">
+                <form action="{{ route('admin.orders.update', $order->id) }}" method="POST" enctype="multipart/form-data"
+                    id="catUploadForm">
+                    @csrf
+                    @method('PUT')
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h4 class="card-title">Change Status</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row  mb-2">
+                                <label for="" class="col-md-3 col-sm-3 col-xs-12">
+                                    Status
+                                </label>
+                                <div class="col-md-8 col-sm-6 col-xs-12">
+                                    <select name="status" id="status" class="form-control">
+                                        <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}
+                                            {{ $order->status == 'processing' ? 'disabled' : '' }}>Pending
+                                        </option>
+                                        <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>
+                                            Processing</option>
+                                        <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>
+                                            Cancelled</option>
+                                        <option value="delivered" {{ $order->status === 'delivered' ? 'selected' : '' }}
+                                            {{ $order->status == 'pending' ? 'disabled' : '' }}>
+                                            Delivered</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class=" col-form-label"></label>
+                                <div class="">
+                                    <div class="d-md-flex d-grid align-items-center gap-3">
+                                        <button type="submit" id="uploadBtn" class="btn btn-primary px-4"
+                                            name="submit2">Update</button>
+                                        <a href="{{ route('admin.orders.index') }}"
+                                            class="btn btn-secondary px-4">Back</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        @endif
 
     </div>
 
