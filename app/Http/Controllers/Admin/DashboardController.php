@@ -20,8 +20,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        if (!Auth::check()) {
-            return redirect()->route('admin.login');
+        if (!Auth::check() || Auth::user()->role_id !== "1") {
+            return redirect()->route('admin.login')->with('error', 'You are not authorized to access this page.');
         }
 
         $retailers = User::where('role_id', 2)->get();

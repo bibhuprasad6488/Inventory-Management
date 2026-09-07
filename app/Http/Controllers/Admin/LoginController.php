@@ -24,10 +24,10 @@ class LoginController extends Controller
             $request->session()->regenerate();
             return redirect()->route('admin.dashboard');
         }
-
-        return back()->withErrors([
-            'email' => 'Invalid credentials.',
-        ])->onlyInput('email');
+        return back()->with('error', 'Invalid credentials.');
+        // return back()->withErrors([
+        //     'email' => 'Invalid credentials.',
+        // ])->onlyInput('email');
     }
 
     public function logout(Request $request)

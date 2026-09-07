@@ -241,12 +241,39 @@
                 padding-top: 60px;
             }
         }
+
+        .alert {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
     </style>
 </head>
 
 <body class="flex items-center justify-center min-h-screen bg-[#d8d2d2]">
 
     <main class="login-container">
+
+        @if (session('success'))
+            <div class="alert alert-success mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-danger mb-4">
+                {{ session('error') }}
+            </div>
+        @endif
         <header>
             <h1>Welcome Back</h1>
             <p>Please enter your details to sign in.</p>
