@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\PushNotification;
+use App\Models\User;
 use App\Services\FcmService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -77,6 +78,7 @@ class OrderController extends Controller
 
             $newStatus = $request->status;
             $oldStatus = $order->status;
+            $dueAmount = 0;
 
             if ($oldStatus === 'pending' && $newStatus === 'cancelled') {
 
@@ -103,6 +105,8 @@ class OrderController extends Controller
 
                 $notificationTitle = 'Order Update';
                 $notificationBody = "Hello {$order->retailer->billing_name}, your order is being processed.";
+                $dueAmount = $order->amount;
+                User::where('id', $order->user_id)->increment('due_amount', $dueAmount);
             } elseif ($oldStatus === 'processing' && $newStatus === 'cancelled') {
 
                 foreach ($order->orderDetails as $od) {
@@ -115,6 +119,8 @@ class OrderController extends Controller
 
                 $notificationTitle = 'Order Update';
                 $notificationBody = "Hello {$order->retailer->billing_name}, your order has been cancelled.";
+                $dueAmount = $order->amount;
+                User::where('id', $order->user_id)->decrement('due_amount', $dueAmount);
             } elseif ($oldStatus === 'processing' && $newStatus === 'delivered') {
 
                 $order->status = 'delivered';

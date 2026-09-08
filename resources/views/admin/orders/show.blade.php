@@ -4,22 +4,28 @@
 
 @section('content')
 
+    <div class=" pt-2 pb-4 ">
+        <div>
+            <h1 class="fw-bold mb-3 text-center">Order Details</h1>
+        </div>
+    </div>
+
     {{-- Header --}}
     <div class="d-flex justify-content-between align-items-center mb-4 d-none">
         <div>
-            <h4 class="mb-1">Retailer Details</h4>
+            <h4 class="mb-1">Order Details</h4>
             <p class="text-muted mb-0">
                 View complete customer information
             </p>
         </div>
 
         <div class="d-flex gap-2">
-            <a href="{{ route('admin.retailers.edit', $order->id) }}" class="btn btn-primary">
+            <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-primary">
                 <i class="fas fa-pencil me-1"></i>
                 Edit
             </a>
 
-            <a href="{{ route('admin.retailers.index') }}" class="btn btn-secondary">
+            <a href="{{ route('admin.orders.index') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left me-1"></i>
                 Back
             </a>

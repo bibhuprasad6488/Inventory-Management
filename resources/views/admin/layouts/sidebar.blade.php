@@ -65,6 +65,12 @@
                         <p>Orders</p>
                     </a>
                 </li>
+                <li class="nav-item {{ request()->routeIs(['admin.payment-collections.*']) ? 'active' : '' }} ">
+                    <a href="{{ route('admin.payment-collections.index') }}">
+                        <i class="fas fa-clipboard-list"></i>
+                        <p>Payment Collection</p>
+                    </a>
+                </li>
                 <li class="nav-item {{ request()->routeIs(['admin.stocks.report','admin.stocks.show']) ? 'active' : '' }} ">
                     <a href="{{ route('admin.stocks.report') }}">
                         <i class="fas fa-clipboard-list"></i>

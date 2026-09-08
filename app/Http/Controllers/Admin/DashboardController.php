@@ -27,7 +27,7 @@ class DashboardController extends Controller
         $retailers = User::where('role_id', 2)->get();
         $categories = Category::all();
         $products = Product::all();
-        $orders = Order::where('status', 'approved')->get();
+        $orders = Order::whereIn('status', ['processing', 'delivered'])->get();
         $totalOrderAmount = $orders->sum('amount');
         return view('admin.dashboard', compact(
             'retailers',

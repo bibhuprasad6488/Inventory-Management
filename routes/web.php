@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PackSizeController;
+use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RetailerController;
@@ -21,14 +22,14 @@ Route::get('/', function () {
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
 
-        Route::get('/optimize', function () {
-            Artisan::call('cache:clear');
-            Artisan::call('view:clear');
-            Artisan::call('route:clear');
-            Artisan::call('config:cache');
-            return 'Command executed successfully!';
-            // return what you want
-        });
+    Route::get('/optimize', function () {
+        Artisan::call('cache:clear');
+        Artisan::call('view:clear');
+        Artisan::call('route:clear');
+        Artisan::call('config:cache');
+        return 'Command executed successfully!';
+        // return what you want
+    });
 
 
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -49,9 +50,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('/products', ProductController::class)->names('products');
         Route::resource('/retailers', RetailerController::class)->names('retailers');
         Route::post('/retailers/{id}/status', [RetailerController::class, 'status'])->name('retailers.status');
+        Route::post('/retailers/search', [PaymentController::class, 'search'])->name('retailers.search');
         Route::resource('/stocks', StockController::class)->names('stocks');
         Route::get('/stock-report', [StockController::class, 'report'])->name('stocks.report');
         Route::resource('/orders', OrderController::class)->names('orders');
+        Route::resource('/payment-collections', PaymentController::class)->names('payment-collections');
         Route::resource('/website-setting', WebsiteSettingController::class)->names('website-setting');
     });
 });

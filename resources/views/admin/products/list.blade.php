@@ -23,6 +23,7 @@
                                 <tr>
                                     <th>Sl.No</th>
                                     <th>Image</th>
+                                    <th>HSN</th>
                                     <th>Name</th>
                                     <th>Stock</th>
                                     <th>MRP</th>
@@ -42,6 +43,7 @@
                                             src="{{ asset('admin/img/no-img.png') }}" @endif
                                                 alt="Partner" width="80" class="circle">
                                         </td>
+                                        <td>{{ $p->hsn }}</td>
                                         <td>{{ ucfirst($p->product_name) }}</td>
                                         <td>{{ $p->stock }}</td>
                                         <td>{{ '₹' . $p->mrp }}</td>

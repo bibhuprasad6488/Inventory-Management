@@ -31,7 +31,7 @@
                         </div>
                         <div class="col-sm-7">
                             <strong>
-                                {{ $product->product_name ?? 'N/A' }}
+                                {{ $product->product_name . ' (' . $product->packSize->qty . ')' ?? 'N/A' }}
                             </strong>
                         </div>
                     </div>
@@ -135,8 +135,8 @@
                                         <td>{{ $order->user_name }}</td>
                                         <td>{{ $order->ordered_qty }}</td>
                                         <td>{{ $order->order_date }}</td>
-                                        <td class="font-bold"><a
-                                                href="{{ route('admin.orders.show', $order->id) }}" class="text-primary ">{{ '#' . $order->order_number }}</a>
+                                        <td class="font-bold"><a href="{{ route('admin.orders.show', $order->id) }}"
+                                                class="text-primary ">{{ '#' . $order->order_number }}</a>
                                         </td>
                                         <td>{{ ucfirst($order->status) }}</td>
                                     </tr>
