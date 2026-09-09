@@ -100,6 +100,9 @@
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 36px;
         }
+        .current-status{
+            cursor: default;
+        }
     </style>
 </head>
 

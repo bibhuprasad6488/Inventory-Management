@@ -4,8 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\PaymentCollection;
+use App\Models\PushNotification;
 use App\Models\User;
+use App\Services\FcmService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
@@ -20,9 +27,15 @@ class PaymentController extends Controller
 
     public function search(Request $request)
     {
-        $request->validate([
-            'phone' => 'required|string',
+        $validator = Validator::make($request->all(), [
+            'phone' => 'required|digits:10',
         ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
 
         $user = User::where('phone', $request->phone)->first();
 
@@ -33,9 +46,70 @@ class PaymentController extends Controller
             ], 404);
         }
 
-        $lastOrder = Order::where('user_id', $user->id)->where('status', 'delivered')->with('orderDetails')
+        // /*
+        // |--------------------------------------------------------------------------
+        // | Get Latest Delivered Order
+        // |--------------------------------------------------------------------------
+        // */
+
+        $order = Order::where('user_id', $user->id)
+            ->where('status', 'delivered')
+            ->with('orderDetails')
             ->latest('created_at')
             ->first();
+
+
+        // /*
+        // |--------------------------------------------------------------------------
+        // | Last Order
+        // |--------------------------------------------------------------------------
+        // */
+
+        $lastOrder = null;
+
+        if ($order) {
+
+            $lastOrder = [
+                'id' => $order->id,
+                'order_number' => $order->order_number,
+                'amount' => $order->amount,
+                'due_amount' => $order->due_amount,
+                'status' => $order->status,
+                'created_at' => $order->created_at
+                    ? $order->created_at->format('d M Y, h:i A')
+                    : '',
+            ];
+        }
+
+
+        // /*
+        // |--------------------------------------------------------------------------
+        // | Payment Collections
+        // |--------------------------------------------------------------------------
+        // */
+
+        $collections = [];
+
+        if ($order) {
+
+            $collections = PaymentCollection::where('user_id', $user->id)
+                ->where('order_id', $order->id)
+                ->orderByDesc('id')
+                ->get()
+                ->map(function ($collection) {
+
+                    return [
+                        'id' => $collection->id,
+                        'received_amount' => $collection->received_amount,
+                        'mode_of_payment' => $collection->mode_of_payment,
+                        'received_date' => $collection->received_date
+                            ? Carbon::parse($collection->received_date)
+                            ->format('d-M-Y')
+                            : '',
+                    ];
+                })
+                ->values();
+        }
 
         return response()->json([
 
@@ -43,7 +117,7 @@ class PaymentController extends Controller
 
             'user' => [
                 'id' => $user->id,
-                'name' => $user->name,
+                'name' => $user->billing_name,
                 'email' => $user->email,
                 'phone' => $user->phone,
                 'billing_address' => $user->billing_address,
@@ -51,16 +125,9 @@ class PaymentController extends Controller
                 'due_amount' => $user->due_amount,
             ],
 
-            'last_order' => $lastOrder ? [
-                'id' => $lastOrder->id,
-                'order_number' => $lastOrder->order_number,
-                'amount' => $lastOrder->amount,
-                'due_amount' => $lastOrder->due_amount,
-                'status' => $lastOrder->status,
-                'created_at' => optional($lastOrder->created_at)
-                    ->format('d M Y, h:i A'),
+            'last_order' => $lastOrder,
 
-            ] : null,
+            'collections' => $collections,
 
         ]);
     }
@@ -75,9 +142,68 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, FcmService $fcm)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|exists:users,id',
+            'order_id' => 'required|exists:orders,id',
+            'due_amount' => 'required',
+            'order_number' => 'required',
+            'received_amount' => 'required',
+            'mode_of_payment' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->with('error', $validator->errors()->first());
+        }
+
+        DB::beginTransaction();
+        try {
+            $collection = new PaymentCollection();
+            $collection->user_id = $request->user_id;
+            $collection->order_id = $request->order_id;
+            $collection->received_amount = $request->received_amount;
+            $collection->order_number = $request->order_number;
+            $collection->received_amount = $request->received_amount;
+            $collection->mode_of_payment = $request->mode_of_payment;
+            $collection->received_date = Carbon::now()->format('Y-m-d');
+
+            $collection->save();
+            DB::commit();
+
+            // Send FCM Notification
+            $user = User::findOrFail($request->user_id);
+            $user->decrement('due_amount', $request->received_amount);
+            $pushNotification = PushNotification::where('user_id', $user->id)
+                ->where('is_active', true)
+                ->first();
+
+            if ($pushNotification && $pushNotification->push_token) {
+
+                $pushNot = $fcm->sendToToken(
+                    $pushNotification->push_token,
+                    'Payment Collection',
+                    "Hello {$user->billing_name}, your order has been delivered.",
+                    [
+                        'type' => 'payment',
+                        'order_id' => (string) $request->order_id,
+                        'order_number' => (string) $request->order_number,
+                        // 'status' => (string) $order->status,
+                    ]
+                );
+
+                Log::info('Push notification sent for payment collection', [
+                    'order_id' => $request->order_id,
+                    'user_id' => $request->user_id,
+                    'push_response' => $pushNot,
+                ]);
+            }
+
+            return back()->with('success', 'Payment Collected successfully');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', $th->getMessage());
+        }
     }
 
     /**

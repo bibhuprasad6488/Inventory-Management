@@ -26,6 +26,8 @@ class User extends Authenticatable
         'gst_number',
         'billing_address',
         'status',
+        'created_at',
+        'updated_at'
     ];
 
     /**

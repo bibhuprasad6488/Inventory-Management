@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\PushNotification;
+use App\Models\StockHistory;
 use App\Models\User;
 use App\Services\FcmService;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with('retailer')->get();
+        $orders = Order::with('retailer')->orderByDesc('id')->get();
         return view('admin.orders.list', compact('orders'));
     }
 
@@ -99,6 +100,13 @@ class OrderController extends Controller
                     }
 
                     $product->decrement('stock', $od->qty);
+
+                    StockHistory::create([
+                        'product_id' => $product->id,
+                        'qty' => $od->qty,
+                        'trans_type' => 'debit',
+                        'refrence' => 'Ordered By ' . $order->retailer->billing_name . ' Order ID: ' . $order->id,
+                    ]);
                 }
 
                 $order->status = 'processing';
@@ -113,6 +121,13 @@ class OrderController extends Controller
 
                     Product::where('id', $od->product_id)
                         ->increment('stock', $od->qty);
+
+                    StockHistory::create([
+                        'product_id' => $od->product_id,
+                        'qty' => $od->qty,
+                        'trans_type' => 'credit',
+                        'refrence' => 'By cancellation, Ordered By ' . $order->retailer->billing_name . ' Order ID: ' . $order->id,
+                    ]);
                 }
 
                 $order->status = 'cancelled';

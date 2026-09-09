@@ -60,6 +60,16 @@
 
                     <div class="row mb-3">
                         <div class="col-sm-5 text-muted">
+                            Order ID
+                        </div>
+                        <div class="col-sm-7">
+                            <strong>
+                                {{ $order->id ?? 'N/A' }}
+                            </strong>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-5 text-muted">
                             Order Number
                         </div>
                         <div class="col-sm-7">
@@ -94,11 +104,11 @@
                         <div class="col-sm-7">
 
                             @if ($order->mode_of_payment == 'credit')
-                                <span class="badge bg-primary">
+                                <span class="btn current-status btn-primary">
                                     Credit
                                 </span>
                             @elseif ($order->mode_of_payment == 'cash')
-                                <span class="badge bg-primary">
+                                <span class="btn current-status btn-primary">
                                     Cash
                                 </span>
                             @endif
@@ -113,19 +123,19 @@
                         <div class="col-sm-7">
 
                             @if ($order->status === 'pending')
-                                <span class="badge bg-warning">
+                                <span class="btn current-status btn-warning">
                                     Pending
                                 </span>
                             @elseif ($order->status === 'processing')
-                                <span class="badge bg-info">
+                                <span class="btn current-status btn-info">
                                     Processing
                                 </span>
                             @elseif ($order->status === 'delivered')
-                                <span class="badge bg-success">
+                                <span class="btn current-status btn-success">
                                     Delivered
                                 </span>
                             @else
-                                <span class="badge bg-danger">
+                                <span class="btn current-status btn-danger">
                                     Cancelled
                                 </span>
                             @endif

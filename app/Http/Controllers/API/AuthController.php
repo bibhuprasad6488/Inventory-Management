@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-use function Symfony\Component\Clock\now;
-
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -20,7 +18,7 @@ class AuthController extends Controller
         $validated = Validator::make($request->all(), [
             'billing_name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users,email',
-            'phone' => 'required|numeric',
+            'phone' => 'required|numeric|unique:users,phone',
             'password' => 'required|string|min:8',
             'role_id' => 'required|integer|exists:roles,id'
             // 'email' => 'required|string|email|max:255',
@@ -45,8 +43,8 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
                 'role_id' => $request->role_id,
                 'status' => 'pending',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => NOW(),
+                'updated_at' => NOW(),
             ]);
 
 
@@ -102,7 +100,7 @@ class AuthController extends Controller
                 'message' => 'User account is suspended'
             ], 403);
         }
-        
+
         if (!Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status' => 'error',
@@ -110,7 +108,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $user->tokens()->delete();
+        // $user->tokens()->delete();
         // $token = $user->createToken('auth_token')->plainTextToken;
         $token = $user->createToken('api_token')->plainTextToken;
 

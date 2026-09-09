@@ -22,6 +22,7 @@
                             <thead>
                                 <tr>
                                     <th>Sl.No</th>
+                                    <th>Order ID</th>
                                     <th>Order No.</th>
                                     <th>User Name</th>
                                     <th>Amount</th>
@@ -34,8 +35,8 @@
                                 @foreach ($orders as $order)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $order->order_number }}
-                                        </td>
+                                        <td>{{ $order->id }} </td>
+                                        <td>{{ $order->order_number }} </td>
                                         <td>{{ ucfirst($order->retailer->billing_name) }}</td>
                                         <td>{{ '₹' . $order->amount }}</td>
                                         <td>{{ \Carbon\Carbon::parse($order->order_date)->format('d-M-Y') }}</td>

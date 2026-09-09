@@ -28,11 +28,13 @@ class DashboardController extends Controller
         $categories = Category::all();
         $products = Product::all();
         $orders = Order::whereIn('status', ['processing', 'delivered'])->get();
+        $latestOrders = Order::where('status', 'pending')->latest()->count();
         $totalOrderAmount = $orders->sum('amount');
         return view('admin.dashboard', compact(
             'retailers',
             'categories',
             'products',
+            'latestOrders',
             'totalOrderAmount'
         ));
     }

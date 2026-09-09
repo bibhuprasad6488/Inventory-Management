@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\StockHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -62,6 +63,11 @@ class StockController extends Controller
             foreach ($request->p_id as $key => $productId) {
                 $stock = $request->stocks[$key];
                 Product::where('id', $productId)->increment('stock', $stock);
+                StockHistory::create([
+                    'product_id' => $productId,
+                    'qty' => $stock,
+                    'refrence' => 'Added By Admin',
+                ]);
             }
 
             DB::commit();
@@ -98,7 +104,8 @@ class StockController extends Controller
             ->orderBy('orders.order_date', 'desc')
             ->get();
         // dd($orders, $product);
-        return view('admin.stocks.show', compact('product', 'orders'));
+        $stockRecords = StockHistory::where('product_id', $id)->get();
+        return view('admin.stocks.show', compact('product', 'orders', 'stockRecords'));
     }
 
     /**

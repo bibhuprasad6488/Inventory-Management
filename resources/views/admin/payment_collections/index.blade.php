@@ -19,7 +19,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Search User Information</h4>
+                        <h4 class="card-title">Enter Mobile Number</h4>
                     </div>
 
                     <div class="card-body">
@@ -149,6 +149,15 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-sm-5 text-muted">
+                            Order Amount
+                        </div>
+
+                        <div class="col-sm-7">
+                            <strong class="text-success fs-5" id="orderAmount">0</strong>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-5 text-muted">
                             Order Date
                         </div>
 
@@ -173,8 +182,8 @@
         </div>
 
         {{-- Search User --}}
-        <div class="col-lg-10 d-none" id="collectSection">
-            <form action="" method="POST" class="form-horizontal">
+        <div class="col-lg-12 d-none" id="collectSection">
+            <form action="{{ route('admin.payment-collections.store') }}" method="POST" class="form-horizontal">
                 @csrf
 
                 <div class="card">
@@ -189,7 +198,8 @@
                             <div class="col-md-3 col-sm-6 col-xs-12">
                                 <input type="hidden" id="form_user_id" name="user_id" value="" required readonly>
                                 <input type="hidden" id="form_order_id" name="order_id" value="" required readonly>
-                                <input type="hidden" id="form_due_amount" name="due_amount" value="" required readonly>
+                                <input type="hidden" id="form_due_amount" name="due_amount" value="" required
+                                    readonly>
                                 <input type="text" id="form_order_number" name="order_number" class="form-control"
                                     value="" required readonly>
 
@@ -222,6 +232,28 @@
                 </div>
 
             </form>
+        </div>
+
+        {{-- Search User --}}
+        <div class="col-lg-12 d-none" id="collectDataSection">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2 class="fw-bold mb-3">Payment History</h2>
+                </div>
+                <div class="car-body">
+                    <table class="table table-stripped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Received Amount</th>
+                                <th>Mode of Payment</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="collectData">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
@@ -269,10 +301,10 @@
                         phone: phone
 
                     },
-
-
                     success: function(response) {
+
                         if (!response.success) {
+
                             $('#searchError')
                                 .removeClass('d-none')
                                 .text(response.message || 'User not found.');
@@ -280,66 +312,174 @@
                             return;
                         }
 
+                        // console.log(response);
+
                         let user = response.user;
-
-                        $('#user_id').val(user.id ?? '');
-                        $('#form_user_id').val(user.id ?? '');
-
-                        $('#billingName').text(user.name ?? 'N/A');
-
-                        $('#billingEmail').text(user.email ?? 'N/A');
-
-                        $('#billingPhone').text(user.phone ?? 'N/A');
-
-                        $('#billingAddress').text(user.billing_address ?? 'N/A');
-
-                        $('#gstNumber').text(user.gst_number ?? 'N/A');
-                        $('#dueAmount').text('₹' + (user.due_amount ?? 0));
-                        $('#form_due_amount').val(user.due_amount ?? 0);
+                        let order = response.last_order;
+                        let collections = response.collections || [];
 
 
                         /*
                         |--------------------------------------------------------------------------
-                        | Last Order
+                        | Reset previous data
                         |--------------------------------------------------------------------------
                         */
 
-                        let order = response.last_order;
-                        if (user.due_amount > 0) {
-                            $('#collectSection').removeClass('d-none');
-                        } else {
-                            $('#collectSection').addClass('d-none');
-                        }
+                        $('#detailsSection').addClass('d-none');
+                        $('#collectSection').addClass('d-none');
+                        $('#collectDataSection').addClass('d-none');
 
-                        if (order) {
+                        $('#collectData').empty();
+
+                        $('#form_user_id').val('');
+                        $('#form_order_id').val('');
+                        $('#form_order_number').val('');
+                        $('#form_due_amount').val('');
+                        $('#received_amount').val('');
+                        $('#mode_of_payment').val('');
+
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | User Information
+                        |--------------------------------------------------------------------------
+                        */
+
+                        $('#user_id').val(user.id ?? '');
+
+                        $('#form_user_id').val(user.id ?? '');
+
+                        $('#billingName')
+                            .text(user.name ?? 'N/A');
+
+                        $('#billingEmail')
+                            .text(user.email ?? 'N/A');
+
+                        $('#billingPhone')
+                            .text(user.phone ?? 'N/A');
+
+                        $('#billingAddress')
+                            .text(user.billing_address ?? 'N/A');
+
+                        $('#gstNumber')
+                            .text(user.gst_number ?? 'N/A');
+
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Order Information
+                        |--------------------------------------------------------------------------
+                        */
+
+                        if (order || user) {
 
                             $('#detailsSection').removeClass('d-none');
-                            $('#orderId').text(order.id ?? '-');
-                            $('#form_order_id').val(order.id ?? '');
-                            $('#orderNumber').text(order.order_number ?? '-');
-                            $('#form_order_number').val(order.order_number ?? '');
-                            $('#orderDate').text(order.created_at ?? '-');
 
-                            // $('#orderStatus')
-                            //     .text(order.status ?? '-');
+                            $('#orderId').text(order?.id ?? '-');
 
+                            $('#form_order_id').val(order?.id ?? '');
 
-                            /*
-                            |--------------------------------------------------------------------------
-                            | Due Amount
-                            |--------------------------------------------------------------------------
-                            */
+                            $('#orderNumber').text(order?.order_number ?? '-');
 
-                            // $('#dueAmount')
-                            //     .text('₹' + (order.due_amount ?? 0));
+                            $('#form_order_number').val(order?.order_number ?? '');
+
+                            $('#orderDate').text(order?.created_at ?? '-');
+
+                            $('#orderAmount').text(
+                                '₹' + parseFloat(order?.amount ?? 0).toFixed(2)
+                            );
 
                         } else {
 
                             $('#detailsSection').addClass('d-none');
 
-                            $('#dueAmount').text('₹0');
+                            $('#orderId').text('-');
+                            $('#orderNumber').text('-');
+                            $('#orderDate').text('-');
+                            $('#orderAmount').text('₹0');
                         }
 
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Due Amount
+                        |--------------------------------------------------------------------------
+                        */
+
+                        let dueAmount = parseFloat(user.due_amount ?? 0);
+
+                        $('#dueAmount').text('₹' + dueAmount.toFixed(2));
+
+                        $('#form_due_amount').val(dueAmount);
+
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Collect Payment Section
+                        |--------------------------------------------------------------------------
+                        */
+
+                        if (order && dueAmount > 0) {
+
+                            $('#collectSection').removeClass('d-none');
+
+                            $('#received_amount')
+                                .attr('max', dueAmount)
+                                .val('');
+
+                        } else {
+
+                            $('#collectSection').addClass('d-none');
+
+                            $('#received_amount')
+                                .removeAttr('max')
+                                .val('');
+                        }
+
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Payment History
+                        |--------------------------------------------------------------------------
+                        */
+
+                        if (collections.length > 0) {
+
+                            $('#collectDataSection').removeClass('d-none');
+
+                            $.each(collections, function(index, cd) {
+
+                                let receivedAmount =
+                                    parseFloat(cd.received_amount || 0);
+
+                                let paymentMode = cd.mode_of_payment ?
+                                    cd.mode_of_payment.charAt(0).toUpperCase() +
+                                    cd.mode_of_payment.slice(1) :
+                                    '-';
+
+                                let results = `
+                                    <tr>
+                                        <td>
+                                            ₹${receivedAmount.toFixed(2)}
+                                        </td>
+
+                                        <td>
+                                            ${paymentMode}
+                                        </td>
+
+                                        <td>
+                                            ${cd.received_date ?? '-'}
+                                        </td>
+                                    </tr>
+                                `;
+
+                                $('#collectData').append(results);
+                            });
+
+                        } else {
+
+                            $('#collectDataSection').addClass('d-none');
+                        }
                     },
 
 

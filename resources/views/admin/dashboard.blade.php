@@ -1,11 +1,32 @@
 @extends('admin.layouts.app')
 @section('title', 'Dashboard')
 @section('content')
+    <style>
+        .new-orders {
+            animation: blink 1s infinite;
+            color: #ff0000;
+        }
 
-    <h1>Welcome, {{ auth()->user()->name }}</h1>
+        @keyframes blink {
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+    <h1>Welcome, {{ auth()->user()->billing_name }}</h1>
     <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
         <div>
             <h3 class="fw-bold mb-3">Dashboard</h3>
+            <a href="{{ route('admin.orders.index') }}" class="{{ $latestOrders > 0 ? 'new-orders' : 'd-none' }} fs-2">
+                You have {{ $latestOrders }} New Orders
+            </a>
         </div>
         {{-- <div class="ms-md-auto py-2 py-md-0">
             <a href="#" class="btn btn-label-info btn-round me-2">Manage</a>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\PushNotification;
 use App\Models\Role;
 use App\Models\SiteSetting;
@@ -80,7 +81,8 @@ class UserController extends Controller
             if (!$user) {
                 return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);
             }
-            $user->order_count = $user->orders()->count();
+            $user->order_count = $user->orders()->where('status', 'delivered')->count();
+            $user->total_order_amount = $user->orders()->where('status', 'delivered')->sum('amount');
 
             return response()->json([
                 'status' => 'success',
@@ -209,7 +211,7 @@ class UserController extends Controller
 
     public function getDashboardData(Request $request)
     {
-        $userId = Auth::id();
+        $userId = Auth::user()->id;
         $user = User::find($userId);
         if (!$user) {
             return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);
@@ -219,17 +221,14 @@ class UserController extends Controller
 
             // Make cache key
             $dashDataCacheKey = 'dashboard_data_user_' . $userId;
-            $cachedData = Cache::remember($dashDataCacheKey, now()->addMinutes(10), function () use ($user) {
-                // Fetch the dashboard data for the user
-                return [
-                    'user_name' => $user->billing_name,
-                    'due_amount' => $user->due_amount,
-                    'total_orders' => $user->orders()->count(),
-                    'total_order_amount' => $user->orders()->sum('amount'),
-                    'latest_orders' => $user->orders()->orderBy('order_date', 'desc')->take(3)->get(),
-                    // Add more dashboard metrics as needed
-                ];
-            });
+            $cachedData = [
+                'user_name' => $user->billing_name,
+                'due_amount' => $user->due_amount,
+                'total_orders' => $user->orders()->where('status', 'delivered')->count(),
+                'total_order_amount' => $user->orders()->where('status', 'delivered')->sum('amount'),
+                'latest_orders' => $user->orders()->orderBy('order_date', 'desc')->take(3)->get(),
+                // Add more dashboard metrics as needed
+            ];
 
             return response()->json([
                 'status' => 'success',

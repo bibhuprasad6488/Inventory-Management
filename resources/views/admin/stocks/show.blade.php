@@ -4,6 +4,12 @@
 
 @section('content')
 
+    <style>
+        .datatable-table>tbody>tr>td.brdr {
+            border: 1px solid #fff !important;
+            color: #fff;
+        }
+    </style>
     <div class=" pt-2 pb-4 ">
         <div>
             <h1 class="fw-bold mb-3 text-center">Stock Report</h1>
@@ -60,7 +66,9 @@
                             Stock
                         </div>
                         <div class="col-sm-7">
-                            {{ $product->stock ?? 'N/A' }}
+                            <strong class="btn btn-primary fs-2">
+                                {{ $product->stock ?? 'N/A' }}
+                            </strong>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -115,7 +123,7 @@
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="fas fa-info-circle me-2"></i>
-                        Order Details
+                        History
                     </h5>
                 </div>
 
@@ -123,22 +131,23 @@
                     <div class="table-responsive">
                         <table id="dataTable" class="table table-bordered table-striped">
                             <thead>
-                                <th>User</th>
-                                <th>Ordered Qty</th>
-                                <th>Date</th>
-                                <th>Order Number</th>
-                                <th>Status</th>
+                                <tr>
+                                    <th class="text-center">Sl No.</th>
+                                    <th class="text-center">Transaction Type</th>
+                                    <th class="text-center">Qty</th>
+                                    <th class="text-center">Reference</th>
+                                    <th class="text-center">Date</th>
+                                </tr>
                             </thead>
                             <tbody>
-                                @foreach ($orders as $order)
+                                @foreach ($stockRecords as $sr)
                                     <tr>
-                                        <td>{{ $order->user_name }}</td>
-                                        <td>{{ $order->ordered_qty }}</td>
-                                        <td>{{ $order->order_date }}</td>
-                                        <td class="font-bold"><a href="{{ route('admin.orders.show', $order->id) }}"
-                                                class="text-primary ">{{ '#' . $order->order_number }}</a>
-                                        </td>
-                                        <td>{{ ucfirst($order->status) }}</td>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td class="{{ $sr->trans_type == 'credit' ? 'bg-success' : 'bg-danger brdr' }} text-center">
+                                            {{ ucfirst($sr->trans_type) }}</td>
+                                        <td class="text-center">{{ $sr->qty }}</td>
+                                        <td class="text-center">{{ $sr->refrence }}</td>
+                                        <td class="text-center">{{ \Carbon\Carbon::parse($sr->created_at)->format('d-M-Y') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
