@@ -12,6 +12,7 @@ use App\Services\FcmService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
@@ -142,6 +143,40 @@ class OrderController extends Controller
 
                 $notificationTitle = 'Order Update';
                 $notificationBody = "Hello {$order->retailer->billing_name}, your order has been delivered.";
+
+                // Send an email to retailer
+                $toEmail = $order->retailer->email;
+                $subject = 'Order Delivery Confirmation';
+
+                $body = "Hello {$order->retailer->billing_name},\n\n"
+                    . "Your order has been successfully delivered.\n\n"
+                    . "Order Number: {$order->order_number}\n"
+                    . "Delivery Date: " . now()->format('d M Y, h:i A') . "\n\n"
+                    . "Thank you for your business.\n\n"
+                    . "Regards,\n"
+                    . "Trumate Services";
+
+                try {
+
+                    Mail::raw($body, function ($message) use ($toEmail, $subject) {
+                        $message->to($toEmail)
+                            ->subject($subject);
+                    });
+
+                    Log::info('Order Delivery Confirmation Email Sent Successfully', [
+                        'email' => $toEmail,
+                        'order_id' => $order->id,
+                        'order_number' => $order->order_number,
+                    ]);
+                } catch (\Throwable $th) {
+
+                    Log::error('Failed to Send Order Delivery Confirmation Email', [
+                        'email' => $toEmail,
+                        'order_id' => $order->id,
+                        'order_number' => $order->order_number,
+                        'error' => $th->getMessage(),
+                    ]);
+                }
             } else {
 
                 throw new \Exception(
