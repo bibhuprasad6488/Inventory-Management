@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
     Route::get('/get-roles', [UserController::class, 'getRoles']);
+    Route::get('/get-site-setting', [ApiController::class, 'setting']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/forgot-password', [AuthController::class, 'paswordReset']);
@@ -31,7 +32,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/create-order', [ApiController::class, 'createOrder']);
         Route::get('/my-orders', [ApiController::class, 'getUserOrders']);
         Route::post('/notifications/register-token', [UserController::class, 'registerPushToken']);
-        Route::any('/user-update', [UserController::class, 'updateUser']);
+        Route::put('/user-update', [UserController::class, 'updateUser']);
         Route::any('/get-dashboard-data', [UserController::class, 'getDashboardData']);
         Route::get('/user', [UserController::class, 'getUser']);
         Route::post('/logout', [AuthController::class, 'logout']);

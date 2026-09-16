@@ -20,7 +20,7 @@
                             method="POST" enctype="multipart/form-data">
                             @csrf
                             <br />
-                            <div class="card">
+                            {{-- <div class="card d-none">
                                 <div class="card-header text-center fs-3">
                                     SEO Setting
                                 </div>
@@ -65,10 +65,10 @@
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <textarea name="site_desc" id="site_desc" class="form-control " rows="3">{{ optional($setting)->site_desc }}</textarea>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="form-group row  mb-2">
-                                <label for="" class="col-md-3 d-flex justify-content-end col-sm-3 col-xs-12">Contact
+                                <label for="" class="col-md-3 d-flex justify-content-end col-sm-3 col-xs-12">Support
                                     No
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -76,7 +76,7 @@
                                         value="{{ optional($setting)->contact_phone }}" required>
                                 </div>
                             </div>
-                            <div class="form-group row  mb-2">
+                            {{-- <div class="form-group row d-none mb-2">
                                 <label for="firstname" class="d-flex justify-content-end col-md-3 col-sm-3 col-xs-12">
                                     Email ID </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -118,7 +118,7 @@
                                         value="{{ optional($setting)->alt_email }}">
                                 </div>
                             </div>
-                            <div class="form-group row  mb-2">
+                            <div class="form-group row d-none mb-2">
                                 <label for="Img" class="col-md-3 d-flex justify-content-end col-sm-3 col-xs-12">
                                     Logo (Drag & Drop)</label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -135,7 +135,7 @@
                                     <img src="" id="siteLogoPreview" width="150">
                                 </div>
                             </div>
-                            <div class="form-group row  mb-2">
+                            <div class="form-group row d-none mb-2">
                                 <label for="Img" class="col-md-3 d-flex justify-content-end col-sm-3 col-xs-12">
                                     Footer Logo (Drag & Drop)</label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -184,7 +184,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row  mb-2">
+                            <div class="form-group row d-none mb-2">
                                 <label for="Img" class="col-md-3 d-flex justify-content-end col-sm-3 col-xs-12">
                                     Favicon (Drag & Drop)</label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -202,7 +202,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row  mb-2">
+                            <div class="form-group row d-none mb-2">
                                 <label for="" class="col-md-3 d-flex justify-content-end col-sm-3 col-xs-12">
                                     Address
                                 </label>
@@ -211,7 +211,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group  row  mb-2">
+                            <div class="form-group d-none  row  mb-2">
                                 <label for="" class="col-md-3 d-flex justify-content-end col-sm-3 col-xs-12">
                                     Location
                                 </label>
@@ -251,7 +251,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row  mb-2">
+                            <div class="form-group row d-none  mb-2">
                                 <label for=""
                                     class="col-md-3 d-flex justify-content-end col-sm-3 col-xs-12">Commission (%)
                                 </label>
@@ -260,7 +260,7 @@
                                         value="{{ optional($setting)->commision }}" required>
                                 </div>
                             </div>
-                            <div class="form-group row  mb-2">
+                            <div class="form-group d-none row  mb-2">
                                 <label for=""
                                     class="col-md-3 d-flex justify-content-end col-sm-3 col-xs-12">Copyrights
                                 </label>
@@ -324,7 +324,7 @@
                                     <input type="text" name="smtp_from_email" id="smtp_from_email"
                                         class="form-control " value="{{ optional($setting)->smtp_from_email }}">
                                 </div>
-                            </div>
+                            </div> --}}
 
 
                             <hr />
@@ -344,7 +344,7 @@
         </div>
     </div>
 @endsection
-@push('scripts')
+{{-- @push('scripts')
     <script>
         function previewSiteLogoImage(event) {
             const input = event.target;
@@ -401,4 +401,4 @@
             });
         });
     </script>
-@endpush
+@endpush --}}

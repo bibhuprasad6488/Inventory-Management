@@ -54,9 +54,9 @@ class WebsiteSettingController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'site_title' => 'required|string|max:255',
-        ]);
+        // $request->validate([
+        //     'site_title' => 'required|string|max:255',
+        // ]);
         DB::beginTransaction();
         try {
             $setting = SiteSetting::find(1);

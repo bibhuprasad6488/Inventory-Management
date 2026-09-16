@@ -126,12 +126,12 @@
                     </div> --}}
                 </li>
 
-                {{-- <li class="nav-item {{ request()->routeIs(['admin.website-setting.index']) ? 'active' : '' }} ">
+                <li class="nav-item {{ request()->routeIs(['admin.website-setting.index']) ? 'active' : '' }} ">
                     <a href="{{ route('admin.website-setting.index') }}">
                         <i class="fas fa-cogs"></i>
                         <p>Site Setting</p>
                     </a>
-                </li> --}}
+                </li>
             </ul>
         </div>
     </div>

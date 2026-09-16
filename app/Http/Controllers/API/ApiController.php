@@ -7,11 +7,14 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
+use App\Models\SiteSetting;
+use App\Services\FcmService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
@@ -106,7 +109,7 @@ class ApiController extends Controller
         return response()->json(['status' => 'success', 'data' => $products]);
     }
 
-    public function createOrder(Request $request)
+    public function createOrder(Request $request, FcmService $fcm)
     {
         $user = Auth::user();
         if (!$user) {
@@ -161,7 +164,7 @@ class ApiController extends Controller
             }
 
             DB::commit();
-
+            $fcm->sendNotificaton($order->id, $order->user_id);
             return response()->json([
                 'status' => 'success',
                 'message' => 'Order created successfully',
@@ -194,5 +197,14 @@ class ApiController extends Controller
             'status' => 'success',
             'data' => $orders
         ], 200);
+    }
+
+    public function setting()
+    {
+        $setting = SiteSetting::find(1) ?? '';
+        return response()->json([
+            'status' =>  'success',
+            'support_number' => $setting->contact_phone,
+        ]);
     }
 }
