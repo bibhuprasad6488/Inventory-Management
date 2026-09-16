@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -124,8 +127,68 @@ class AuthController extends Controller
         if ($validated->fails()) {
             return response()->json(['status' => 'error', 'message' => $validated->errors()->first()]);
         }
+        
+        try {
+            // Find user
+            $user = User::where('email', $request->email)->first();
 
-        // Generate OTP for to send through email or phone
+            if ($user->status !== 'approved') {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'User account is suspended'
+                ], 403);
+            }
+
+            // Generate a random password
+            $randomPassword = Str::random(8);
+            // Update password
+            $user->password = Hash::make($randomPassword);
+            $user->save();
+            // Send an email to retailer
+            $toEmail = $user->email;
+            $subject = 'Password Reset Confirmation';
+            $body = "Hello {$user->billing_name},\n\n"
+                . "You have requested a new password through the forgot password option. "
+                . "Please use the credentials below to log in:\n\n"
+                . "Email: {$toEmail}\n"
+                . "Password: {$randomPassword}\n\n"
+                . "For security reasons, please change your password after logging in.\n\n"
+                . "Thank you for your business.\n\n"
+                . "Regards,\n"
+                . "Trumate Services";
+
+            try {
+
+                Mail::raw($body, function ($message) use ($toEmail, $subject) {
+                    $message->to($toEmail)
+                        ->subject($subject);
+                });
+
+                Log::info('Email Sent Successfully with new password', [
+                    'email' => $toEmail,
+                    'name' => $user->billing_name,
+                ]);
+            } catch (\Throwable $th) {
+
+                Log::error('Failed to Send Email', [
+                    'email' => $toEmail,
+                    'error' => $th->getMessage(),
+                ]);
+            }
+
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'A new password has been sent to your email address',
+                'pass' => $randomPassword
+            ], 200);
+        } catch (\Throwable $th) {
+            Log::error('Password Reset Failed', ['email' => $request->email, 'error' => $th->getMessage(),]);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error: ' . $th->getMessage(),
+            ], 500);
+        }
     }
 
     public function logout()

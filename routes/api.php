@@ -27,6 +27,7 @@ Route::prefix('v1')->group(function () {
         //         : $request->user();
         // });
 
+        Route::post('/change-password', [UserController::class, 'changePassword']);
         Route::post('/create-order', [ApiController::class, 'createOrder']);
         Route::get('/my-orders', [ApiController::class, 'getUserOrders']);
         Route::post('/notifications/register-token', [UserController::class, 'registerPushToken']);

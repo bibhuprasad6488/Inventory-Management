@@ -12,65 +12,50 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function changePassword(Request $request)
     {
-        //
-    }
+        $authUser = Auth::user();
+        if (!$authUser) {
+            return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);
+        }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $validated = Validator::make($request->all(), [
+            'current_password' => 'required',
+            'new_password' => 'required|string|min:8',
+            'confirm_password' => 'required|same:new_password'
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if ($validated->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validated->errors()->first()]);
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        DB::beginTransaction();
+        try {
+            $user = User::findOrFail($authUser->id);
+            if (!Hash::check($request->current_password, $user->password)) {
+                return response()->json(['status' => 'error', 'message' => 'Current password is incorrect',], 401);
+            }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+            DB::commit();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+            return response()->json(['status' => 'success', 'message' => 'Password changed successfully',], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+            Log::error('Password Change Failed', ['user_id' => $authUser->id, 'error' => $th->getMessage(),]);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error: ' . $th->getMessage(),
+            ], 500);
+        }
     }
 
     public function getUser(Request $request)
