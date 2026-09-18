@@ -205,6 +205,7 @@ class ApiController extends Controller
         return response()->json([
             'status' =>  'success',
             'support_number' => $setting->contact_phone,
+            'support_email' => $setting->contact_email,
         ]);
     }
 }

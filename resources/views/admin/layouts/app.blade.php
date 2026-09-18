@@ -12,9 +12,7 @@
     <title>@yield('title') | {{ config('app.name', 'Laravel') }}</title>
 
     <!-- Favicon -->
-    <link rel="icon"
-        href="@if ($setting) {{ asset('storage/images/settings/' . $setting->favicon) }} @else {{ asset('admin/img/user.png') }} @endif"
-        type="image/x-icon" />
+    <link rel="icon" href="{{ asset('admin/img/user.png') }} " type="image/x-icon" />
 
     <!-- Fonts -->
     <script src="{{ asset('admin/js/plugin/webfont/webfont.min.js') }}"></script>
@@ -100,7 +98,8 @@
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 36px;
         }
-        .current-status{
+
+        .current-status {
             cursor: default;
         }
     </style>

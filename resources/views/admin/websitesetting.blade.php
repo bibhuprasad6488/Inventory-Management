@@ -76,15 +76,15 @@
                                         value="{{ optional($setting)->contact_phone }}" required>
                                 </div>
                             </div>
-                            {{-- <div class="form-group row d-none mb-2">
+                            <div class="form-group row  mb-2">
                                 <label for="firstname" class="d-flex justify-content-end col-md-3 col-sm-3 col-xs-12">
-                                    Email ID </label>
+                                    Support Email </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <input type="email" name="contact_email" id="contact_email" class="form-control "
                                         value="{{ optional($setting)->contact_email }}">
                                 </div>
                             </div>
-                            <div class="form-group row d-none  mb-2">
+                            {{-- <div class="form-group row d-none  mb-2">
                                 <label for="" class="col-md-3 d-flex justify-content-end col-sm-3 col-xs-12">Alt.
                                     Contact No
                                 </label>
