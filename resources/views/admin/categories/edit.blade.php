@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Add Categorry')
+@section('title', 'Edit Categorry')
 @section('content')
 
     <div class="row">
@@ -10,7 +10,7 @@
                 @method('PUT')
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Add Categorry</h4>
+                        <h4 class="card-title">Edit Categorry</h4>
                     </div>
                     <div class="card-body">
                         <div class="form-group row  mb-2">

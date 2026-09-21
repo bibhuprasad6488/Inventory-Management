@@ -111,7 +111,7 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255|unique:categories,title,' . $id,
             'parent_category' => 'nullable',
-            'img_path' => 'required',
+            'img_path' => 'nullable',
             'status' => 'required|in:1,0',
         ]);
 
