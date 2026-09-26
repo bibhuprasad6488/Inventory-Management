@@ -42,13 +42,14 @@
                                         <td>{{ \Carbon\Carbon::parse($c->created_at)->format('d-m-Y') }}</td>
                                         <td>
                                             <a href="{{ route('admin.categories.edit', $c->id) }}"
-                                                class="btn btn-success ">Edit</a>
+                                                class="btn fs-5 text-info"><i class="bi bi-pencil-square"></i></a>
                                             <form action="{{ route('admin.categories.destroy', $c->id) }}" method="POST"
                                                 style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this?');">Delete</button>
+                                                <button type="submit" class="btn fs-5 text-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this?');"><i
+                                                        class="bi bi-trash3"></i></button>
                                             </form>
                                         </td>
                                     </tr>

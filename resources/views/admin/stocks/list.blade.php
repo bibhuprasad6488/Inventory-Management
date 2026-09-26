@@ -35,7 +35,7 @@
                                         <td>{{ $p->stock }}</td>
                                         <td>
                                             <a href="{{ route('admin.stocks.show', $p->id) }}"
-                                                class="btn btn-info ">View Details</a>
+                                                 class="btn fs-5 text-success" title="View Details"><i class="bi bi-eye-fill"></i></a>
 
                                         </td>
                                     </tr>

@@ -13,7 +13,7 @@
                             <thead>
                                 <tr>
                                     <th width="55%">Product</th>
-                                    <th width="30%">Stock Qty</th>
+                                    <th width="30%">Qty</th>
                                     <th width="15%" class="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -23,10 +23,11 @@
                                             <option value="" selected disabled> Select Product </option>
                                             @foreach ($products as $p)
                                                 <option value="{{ $p->id }}"> {{ ucfirst($p->product_name) }}
-                                                    {{ $p->packSize?->qty }} </option>
+                                                    ({{ 'Pack Size = ' . $p->packSize?->qty }})
+                                                    ({{ 'Stock = ' . $p->stock }}) </option>
                                             @endforeach
                                         </select> </td>
-                                    <td> <input type="number" class="form-control" name="stocks[]" placeholder="Stock Qty"
+                                    <td> <input type="number" class="form-control" name="stocks[]" placeholder="Qty"
                                             min="1" required> </td>
                                     <td class="text-center"> <button type="button" class="btn btn-sm btn-primary addBtn"> +
                                         </button> </td>
@@ -126,7 +127,8 @@
                                 @foreach ($products as $p)
                                     <option value="{{ $p->id }}">
                                         {{ ucfirst($p->product_name) }}
-                                        {{ $p->packSize?->qty }}
+                                        ({{ 'Pack Size = ' . $p->packSize?->qty }})
+                                        ({{ 'Stock = ' . $p->stock }})
                                     </option>
                                 @endforeach
 
@@ -137,7 +139,7 @@
                             <input type="number"
                                 class="form-control"
                                 name="stocks[]"
-                                placeholder="Stock Qty"
+                                placeholder="Qty"
                                 min="1"
                                 required>
                         </td>

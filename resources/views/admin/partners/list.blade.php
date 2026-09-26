@@ -44,13 +44,14 @@
                                         <td>{{ \Carbon\Carbon::parse($p->created_at)->format('d-m-Y') }}</td>
                                         <td>
                                             <a href="{{ route('admin.partners.edit', $p->id) }}"
-                                                class="btn btn-sm btn-primary">Edit</a>
+                                                class="btn fs-5 text-info"><i class="bi bi-pencil-square"></i></a>
                                             <form action="{{ route('admin.partners.destroy', $p->id) }}" method="POST"
                                                 style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this?');">Delete</button>
+                                                <button type="submit" class="btn fs-5 text-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this?');"><i
+                                                        class="bi bi-trash3"></i></button>
                                             </form>
                                         </td>
                                     </tr>

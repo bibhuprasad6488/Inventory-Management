@@ -18,14 +18,8 @@
                                 Category
                             </label>
                             <div class="col-md-8 col-sm-6 col-xs-12">
-                                <select name="category_id" id="category_id" class="form-control add-cat" required>
-                                    <option value="" selected disabled>Select Category</option>
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}"
-                                            {{ $product->category_id == $category->id ? 'selected' : '' }}>
-                                            {{ ucfirst($category->title) }}</option>
-                                    @endforeach
-                                </select>
+                                <input type="hidden" name="category_id" value="{{ $product->category_id }}">
+                                <input type="text" value="{{ $product->category->title }}" class="form-control" readonly>
                             </div>
                         </div>
                         <div class="form-group row  mb-2">
@@ -43,7 +37,7 @@
                             </label>
                             <div class="col-md-8 col-sm-6 col-xs-12">
                                 <input type="text" name="hsn" id="hsn" class="form-control"
-                                    value="{{ $product->hsn }}" placeholder="HSN" required>
+                                    value="{{ $product->hsn }}" placeholder="HSN" required readonly>
                             </div>
                         </div>
                         <div class="form-group row  mb-2">
@@ -51,14 +45,8 @@
                                 Size
                             </label>
                             <div class="col-md-8 col-sm-6 col-xs-12">
-                                <select name="pack_size" id="pack_size" class="form-control add-size" required>
-                                    <option value="" selected disabled>Select Size</option>
-                                    @foreach ($packSizes as $pack)
-                                        <option value="{{ $pack->id }}"
-                                            {{ $product->pack_size == $pack->id ? 'selected' : '' }}>
-                                            {{ ucfirst($pack->qty) }}</option>
-                                    @endforeach
-                                </select>
+                                <input type="hidden" name="pack_size" value="{{ $product->pack_size }}">
+                                <input type="text" value="{{ $product->packSize->qty }}" class="form-control" readonly>
                             </div>
                         </div>
 
@@ -149,11 +137,3 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            initializeSelect2('.add-cat, .add-size');
-        })
-    </script>
-@endpush

@@ -18,7 +18,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::orderBy('id', 'desc')->get()->map(function ($product) {
+        $products = Product::with('packSize', 'category')->orderBy('id', 'desc')->get()->map(function ($product) {
             $product->image = $product->image ? asset('uploads/product/' . $product->image) : asset('admin/img/no-img.png');
             return $product;
         });
@@ -108,7 +108,7 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('packSize', 'category')->findOrFail($id);
         $product->image = $product->image ? asset('uploads/product/' . $product->image) : asset('admin/img/no-img.png');
         $packSizes = PackSize::where('status', 1)->get();
         $categories = Category::where('status', 1)->get();

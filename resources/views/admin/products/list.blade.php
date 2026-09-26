@@ -23,12 +23,12 @@
                                 <tr>
                                     <th>Sl.No</th>
                                     <th>Image</th>
-                                    <th>HSN</th>
-                                    <th>Name</th>
+                                    <th>Product</th>
+                                    <th>Pack Size</th>
+                                    <th>Category</th>
                                     <th>Stock</th>
                                     <th>MRP</th>
                                     <th>Selling Price</th>
-                                    <th>Created Date</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -43,12 +43,13 @@
                                             src="{{ asset('admin/img/no-img.png') }}" @endif
                                                 alt="Partner" width="80" class="circle">
                                         </td>
-                                        <td>{{ $p->hsn }}</td>
-                                        <td>{{ ucfirst($p->product_name) }}</td>
+                                        <td>{{ ucfirst($p->product_name) }} <br> <small><i class="text-muted">HSN:
+                                                    {{ $p->hsn }}</i></small></td>
+                                        <td>{{ ucfirst($p->packSize->qty) }}</td>
+                                        <td>{{ ucfirst($p->category->title) }}</td>
                                         <td>{{ $p->stock }}</td>
                                         <td>{{ '₹' . $p->mrp }}</td>
                                         <td>{{ '₹' . $p->selling_price }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($p->created_at)->format('d-M-Y') }}</td>
                                         <td>
                                             @if ($p->status == 1)
                                                 <span class="badge bg-success">Active</span>
@@ -58,13 +59,14 @@
                                         </td>
                                         <td>
                                             <a href="{{ route('admin.products.edit', $p->id) }}"
-                                                class="btn btn-success ">Edit</a>
+                                                class="btn fs-5 text-info"><i class="bi bi-pencil-square"></i></a>
                                             <form action="{{ route('admin.products.destroy', $p->id) }}" method="POST"
                                                 style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this?');">Delete</button>
+                                                <button type="submit" class="btn fs-5 text-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this?');"><i
+                                                        class="bi bi-trash3"></i></button>
                                             </form>
                                         </td>
                                     </tr>

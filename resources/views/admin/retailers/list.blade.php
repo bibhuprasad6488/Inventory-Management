@@ -47,13 +47,14 @@
                                         </td>
                                         <td>
                                             <a href="{{ route('admin.retailers.show', $u->id) }}"
-                                                class="btn btn-success ">View</a>
+                                                class="btn fs-5 text-info" title="Edit"><i class="bi bi-pencil-square"></i></a>
                                             <form action="{{ route('admin.retailers.destroy', $u->id) }}" method="POST"
                                                 style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"
-                                                    onclick="return confirm('Are you sure you want to deactivate this?');">Suspend</button>
+                                                <button type="submit" class="btn fs-5 text-danger"
+                                                    onclick="return confirm('Are you sure you want to deactivate this?');" title="Suspend"><i
+                                                        class="bi bi-ban"></i></button>
                                             </form>
                                         </td>
                                     </tr>

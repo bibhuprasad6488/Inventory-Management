@@ -17,6 +17,7 @@ class Product extends Model
         'mrp',
         'cost_price',
         'selling_price',
+        'stock',
         'status',
         'image',
         'created_at',

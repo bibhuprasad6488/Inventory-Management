@@ -61,7 +61,7 @@
                                         </td>
                                         <td>
                                             <a href="{{ route('admin.orders.show', $order->id) }}"
-                                                class="btn btn-info ">View</a>
+                                                class="btn fs-5 text-success" title="View"><i class="bi bi-eye-fill"></i></a>
                                             {{-- <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST"
                                                 style="display: inline-block;">
                                                 @csrf

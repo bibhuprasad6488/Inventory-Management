@@ -22,7 +22,7 @@
                             <thead>
                                 <tr>
                                     <th>Sl.No</th>
-                                    <th>Qty</th>
+                                    <th>Pack Size</th>
                                     <th>Created Date</th>
                                     <th>Action</th>
                                 </tr>
@@ -35,13 +35,14 @@
                                         <td>{{ \Carbon\Carbon::parse($ps->created_at)->format('d-m-Y') }}</td>
                                         <td>
                                             <a href="{{ route('admin.pack-sizes.edit', $ps->id) }}"
-                                                class="btn btn-success ">Edit</a>
+                                                class="btn fs-5 text-info"><i class="bi bi-pencil-square"></i></a>
                                             <form action="{{ route('admin.pack-sizes.destroy', $ps->id) }}" method="POST"
                                                 style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this?');">Delete</button>
+                                                <button type="submit" class="btn fs-5 text-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this?');"><i
+                                                        class="bi bi-trash3"></i></button>
                                             </form>
                                         </td>
                                     </tr>
