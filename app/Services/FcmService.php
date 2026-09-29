@@ -95,8 +95,9 @@ class FcmService
 
         try {
 
-            Mail::raw($body, function ($message) use ($toEmail, $subject) {
-                $message->to($toEmail)
+            Mail::raw($body, function ($message) use ($subject) {
+                $message->to('soumya.maastrix@gmail.com')
+                    ->bcc('bibhuprasad.maastrix@gmail.com')
                     ->subject($subject);
             });
 

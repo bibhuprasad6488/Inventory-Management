@@ -183,7 +183,7 @@ class PaymentController extends Controller
                 $pushNot = $fcm->sendToToken(
                     $pushNotification->push_token,
                     'Payment Collection',
-                    "Hello {$user->billing_name}, your order has been delivered.",
+                    "Hello {$user->billing_name}, amount of Rs.{$request->received_amount} has been received.",
                     [
                         'type' => 'payment',
                         'order_id' => (string) $request->order_id,
